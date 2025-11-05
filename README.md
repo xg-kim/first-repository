@@ -8,5 +8,5 @@
 _신기하네요_
 ---
 '''
-prin("hello world")
+print("hello world")
 '''
