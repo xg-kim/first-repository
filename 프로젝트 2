@@ -1,0 +1,101 @@
+menu = ['americano', 'latte', 'mocha', 'yuza_tea', 'green_tea', 'choco_latte']
+price = [2000, 3000, 3000, 2500, 2500, 3000]
+
+class Kiosk:
+    def __init__(self, menu, price):
+        self.menu = menu
+        self.price = price
+        self.order_menu = [] 
+        self.order_price = [] 
+        self.price_sum = 0
+
+    def menu_print(self):
+        for i in range(len(self.menu)):
+            print(i + 1, self.menu[i], ':', self.price[i], '원')
+
+    def menu_select(self):
+        print()
+
+        h = 0
+        while h not in (1, 2):
+            h = int(input("매장에서 드시나요, 포장하시나요? (1:매장, 2:포장) :"))
+            if h == 1:
+                self.place = "매장"
+            elif h == 2:
+                self.place = "포장"
+            else:
+                print("1과 2 중 하나를 입력하세요.\n")
+    
+        while True:
+            n = int(input(f"음료 번호를 입력하세요 (끝내려면 0): "))
+            if n == 0:
+                break
+
+            if 1 <= n <= len(self.menu):
+                self.price_sum = self.price[n-1]
+
+            t = 0
+            while t not in (1, 2):
+                t = int(input("HOT 음료는 1을, ICE 음료는 2를 입력하세요 : "))
+                if t == 1:
+                    self.temp = "HOT"
+                elif t == 2:
+                    self.temp = "ICE"
+                else:
+                    print("1과 2 중 하나를 입력하세요.\n")
+
+            s = 0
+            while s not in (1, 2):
+                s = int(input("음료 사이즈를 선택하세요. (1: Small, 2: Large[500원 추가]) : "))
+                if s == 1:
+                    self.size = "Small"
+                elif s == 2:
+                    self.size = "Large"
+                    self.price_sum += 500
+                else:
+                    print("1과 2 중 하나를 입력하세요.\n")
+
+            order_summary = f"{self.temp} {self.size} {self.menu[n-1]}"
+            final_price = self.price_sum
+            self.order_menu.append(order_summary)
+            self.order_price.append(final_price)
+
+            print('주문 음료', self.temp, self.size, f"{self.menu[n-1]} : {self.price_sum} 원")
+        else:
+            print("없는 메뉴입니다. 다시 주문해 주세요.")
+
+    def pay(self):
+        p = 0
+        while p not in (1, 2):
+            p = int(input("지불 수단은 현금(1) 또는 카드(2) 중에 어떤 것인가요? "))
+            if p == 1:
+                print("직원을 호출하겠습니다.")
+            elif p == 2:
+                print("IC칩 방향에 맞게 카드를 꽂아주세요.")
+            else:
+                print("1과 2 중 하나를 입력하세요.\n")
+
+    def table(self):
+        if not self.order_menu:
+            print("주문 내역이 없습니다.")
+            return
+        print('⟝' + '-' * 30 + '⟞')
+        for _ in range(5):
+            print('|' + ' ' * 31 + '|')
+
+        print(f"[{self.place}] 주문 내역")
+
+        for name, won in zip(self.order_menu, self.order_price):
+            print(name, ':', won)
+
+        print('합계 금액 :', sum(self.order_price))
+
+        for _ in range(5):
+            print('|' + ' ' * 31 + '|')
+        print('⟝' + '-' * 30 + '⟞')
+
+a = Kiosk(menu, price)
+a.menu_print()
+a.menu_select()
+a.pay()
+a.table()
